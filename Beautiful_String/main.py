@@ -2,53 +2,47 @@ import string
 alphabet = string.ascii_lowercase
 # k = int(input()) #целое число k (0 ≤ k ≤ 109)
 # s = input() # непустая строчка S (|S| ≤ 2 ⋅ 105)
-k=2
-#s='zzfffzffffffffffzffffffzfffffzzzfzzzzzzzzzzzzzzzzzzzzzzzzzz'
-s = 'kirill'
+k=1
+s='h'
 dict_list = {}
-count=k
-for _ in range(1):#цикл перебора направления
+for q in range(2):#цикл перебора направления
+    if q == 1:
+        s = s[::-1]
     for i in alphabet:
         if i in s:
             len_count=s.index(i) #индекс буквы
-            letter_index = s.index(i) #индекс буквы 
+            letter_index = s.index(i) #статичный индекс буквы
+            letter = i
         else:  continue
-        while len_count!=(len(s)-1): #цикл перебора буквы x,len_count - индекс y,s[len_count] - значение
-            letter_count = 1 #максимальное число подряд идущих значений
-            k_count =k #количество замен            
-            if s[len_count]==s[letter_index]:
-                for i in range(len_count,len(s)): #i - индекс s[len_count] - значение
-
-                    if i==(len(s)-1): #вызодим ли за пределы строки?
-                        if s[letter_index] in dict_list: # есть ли такая буква в словаре?
-                            if dict_list[s[letter_index]] < letter_count:# меньше ли предыдущая длина 
-                                dict_list[s[letter_index]]=letter_count# если да, заменить
-                                len_count=i
-                                break
-                        else: 
-                            dict_list.setdefault(s[letter_index],letter_count)# если такой буквы нет то добавить
-                            len_count=i# возвращаем индекс последней буквы
-                            break
-
-                    if s[i+1] == s[i]:# если следующая буква равна i
-                        #dict_list[s[len_count]] = dict_list.get(s[len_count], 0)+1#надо переделать
-                        i+=1
-                        letter_count+=1
-                    elif (s[i+1] != s[i]) and (k_count!=0): # если следующая буква не равна i, но заменить её можно
-                        k_count -= 1
-                        i+=1
-                        #dict_list[s[len_count]] = dict_list.get(s[len_count], []).append(letter_count)
-                        letter_count+=1
-                    else: #если заменить нельзя и буква не равна i
-                        if s[letter_index] in dict_list: # есть ли такая буква в словаре?
-                            if dict_list[s[letter_index]] < letter_count:# меньше ли предыдущая длина 
-                                dict_list[s[letter_index]]=letter_count# если да, заменить
-                                len_count=i# возвращаем индекс последней буквы
-                        else: 
-                            dict_list.setdefault(s[letter_index],letter_count)# если такой буквы нет то добавить
-                            len_count=i# возвращаем индекс последней буквы
-                            break
-            else: len_count+=1
+        letter_count = 1 #максимальное число подряд идущих значений
+        k_count =k #количество замен  
+        while len_count!=(len(s)-1): #цикл перебора буквы x,len_count - индекс y,s[len_count] - значение                               
+            if (s[len_count+1]==letter) and (k_count==0): #если следующая буква равна i
+                letter_count+=1
+                k_count =k
+                if letter in dict_list: # есть ли такая буква в словаре?
+                    if dict_list[letter] < letter_count:# меньше ли предыдущая длина 
+                        dict_list[letter]=letter_count# если да, заменить
+                else: 
+                    dict_list.setdefault(letter,letter_count)# если такой буквы нет то добавить
+            elif (s[len_count+1] != letter) and (k_count>0):
+                k_count -=1
+                letter_count+=1
+                len_count+=1
+            elif (s[len_count+1] == letter) and (k_count>0): #если следующая буква равна i
+                letter_count+=1
+                len_count+=1
+            elif (s[len_count+1] != letter) and (k_count == 0): # если следующая буква не равна i, но заменить её можно
+                if letter in dict_list: # есть ли такая буква в словаре?
+                    if dict_list[letter] < letter_count:# меньше ли предыдущая длина 
+                        dict_list[letter]=letter_count# если да, заменить
+                        letter_count=0
+                        len_count+=1
+                    else: len_count+=1
+                else: 
+                    dict_list.setdefault(letter,letter_count)# если такой буквы нет то добавить
+                    letter_count=0
+                    len_count+=1
 print(max(dict_list.values()))                        
 
 #k=5
